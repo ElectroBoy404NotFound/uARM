@@ -14,7 +14,11 @@ $(APP):
 	$(CC) $(CCFLAGS) $(LDFLAGS) emulator/main_pc.c $(SOURCES) -o $(APP)
 
 clean:
-	rm -f $(APP) *.o
+	rm -f $(APP)
+	rm -rf linux/linux*
 
-image:
-	./mkbootimg.sh 
+linux/linux-2.6.34.1:
+	@cd linux; wget https://cdn.kernel.org/pub/linux/kernel/v2.6/linux-2.6.34.1.tar.xz; tar -xf linux-2.6.34.1.tar.xz; cp kernel.config linux-2.6.34.1/.config
+
+linux_build: linux/linux-2.6.34.1
+	@cd linux/linux-2.6.34.1; make $(shell nproc)
